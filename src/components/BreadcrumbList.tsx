@@ -11,8 +11,6 @@ const BreadcrumbList: React.FC = () => {
         (_, index) => `/${pathnames.slice(0, index + 1).join('/')}`,
     );
 
-    console.log(breadcrumbPaths);
-
     return (
         <Breadcrumbs>
             {breadcrumbPaths.length > 0 &&

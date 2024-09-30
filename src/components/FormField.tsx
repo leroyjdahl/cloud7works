@@ -50,7 +50,6 @@ const FormComponent = () => {
     const [selectedForm, setSelectedForm] = useState<any>(null);
     const onSubmit = async (e: any) => {
         try {
-            console.log('Form submitteddd:', e.target.data);
             e.preventDefault();
         } catch (e) {
         }
@@ -63,7 +62,6 @@ const FormComponent = () => {
 
     const handleFormSelect = (form: any) => {
         // setSelectedForm(form);
-        console.log('Selected form:', selectedForm);
         // reset(selectedForm)
         setValue("uniqueId", selectedForm.uniqueId, { shouldTouch: true });
         setValue("altId", selectedForm.altId, { shouldTouch: true });
@@ -80,7 +78,6 @@ const FormComponent = () => {
         setValue("telephone", selectedForm.telephone, { shouldTouch: true });
         setValue("email", selectedForm.email, { shouldTouch: true });
         const state = getValues('state');
-        console.log('State:', state);
     };
 
 
@@ -457,7 +454,6 @@ const FormComponent = () => {
                             email: getValues("email")
                         };
 
-                        console.log('Form Data:', formData);
                     }}>
                         Get Form Data
                     </Button>

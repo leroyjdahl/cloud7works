@@ -58,7 +58,6 @@ export const dropdownNavLinks: NavLink[] = Object.values(routes)
   }));
 
 export const getFriendlyName = (path: string): string => {
-  console.log(path);
   for (const key in routes) {
     const route = routes[key];
 
