@@ -1,32 +1,26 @@
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import {
-    Input,
     Button,
-    Textarea,
     Divider,
-    Checkbox,
-    Autocomplete,
-    AutocompleteItem,
-    DatePicker,
-    DateValue,
+    Checkbox
 } from '@nextui-org/react';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { countries, forms, genders, states } from '../data';
 
 const FormComponent = () => {
+    const [selectedForm, setSelectedForm] = useState<any>(null);
+
     const {
+        control,
         register,
         handleSubmit,
         formState: { errors },
-        getValues,
-
         setValue,
         reset,
-
     } = useForm({
         mode: "onChange",
-        defaultValues: {
+        defaultValues: selectedForm || {
             uniqueId: '',
             altId: '',
             givenName: '',
@@ -45,12 +39,10 @@ const FormComponent = () => {
             letterDate: '',
             comments: '',
         }
-
     });
-    const [selectedForm, setSelectedForm] = useState<any>(null);
     const onSubmit = async (e: any) => {
         try {
-            e.preventDefault();
+            console.log(e);
         } catch (e) {
         }
     };
@@ -61,14 +53,12 @@ const FormComponent = () => {
     };
 
     const handleFormSelect = (form: any) => {
-        // setSelectedForm(form);
-        // reset(selectedForm)
         setValue("uniqueId", selectedForm.uniqueId, { shouldTouch: true });
         setValue("altId", selectedForm.altId, { shouldTouch: true });
         setValue("givenName", selectedForm.givenName, { shouldTouch: true });
         setValue("lastName", selectedForm.lastName, { shouldTouch: true });
         setValue("gender", selectedForm.gender, { shouldTouch: true });
-        setValue("dob", selectedForm.dob, { shouldTouch: true });
+        setValue("dob", form.dob ? new Date(form.dob).toISOString().split('T')[0] : '', { shouldTouch: true });
         setValue("address", selectedForm.address, { shouldTouch: true });
         setValue("street", selectedForm.street, { shouldTouch: true });
         setValue("city", selectedForm.city, { shouldTouch: true });
@@ -77,9 +67,7 @@ const FormComponent = () => {
         setValue("country", selectedForm.country, { shouldTouch: true });
         setValue("telephone", selectedForm.telephone, { shouldTouch: true });
         setValue("email", selectedForm.email, { shouldTouch: true });
-        const state = getValues('state');
     };
-
 
     return (
         <div>
@@ -95,23 +83,19 @@ const FormComponent = () => {
                 </div>
                 <div className="flex w-full flex-wrap md:flex-nowrap gap-4 justify-center items-center my-10">
                     <label htmlFor="search" className="">LABEL</label>
-                    <Autocomplete
+                    <select
                         id='search'
                         autoComplete='on'
                         aria-label="Search a form"
-                        placeholder="Search a form"
-                        className="max-w-xl text-black"
-                        radius="sm"
-                        defaultItems={forms}
-                        onSelectionChange={item => setSelectedForm(forms.find(f => f.value === item))}
-                        onClear={() => setSelectedForm(null)}
+                        className="max-w-xl w-full text-black bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        onChange={event => { setSelectedForm(forms.find(f => f.value === event.target.value)) }}
                     >
-                        {item => (
-                            <AutocompleteItem key={item.value} className="text-black">
-                                {item.label}
-                            </AutocompleteItem>
-                        )}
-                    </Autocomplete>
+                        {forms.map((form) => (
+                            <option key={form.value} value={form.value}>
+                                {form.label}
+                            </option>
+                        ))}
+                    </select>
                     <Button
                         aria-label={'Search'}
                         radius="full"
@@ -132,11 +116,10 @@ const FormComponent = () => {
                         <h2 className="text-xl font-bold">ABOUT</h2>
                         <div className="grid grid-cols-6 gap-4 items-center">
                             <label htmlFor="uniqueId" className="col-span-2">Unique ID</label>
-                            <Input
+                            <input
                                 id='uniqueId'
                                 aria-label={'Unique ID'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('uniqueId', { required: 'Unique ID is required' })}
                             />
                             {errors.uniqueId && (
@@ -146,11 +129,10 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor='altId' className="col-span-2">ALT ID</label>
-                            <Input
+                            <input
                                 id='altId'
                                 aria-label={'ALT ID'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('altId', { required: 'ALT ID is required' })}
                             />
                             {errors.altId && (
@@ -160,11 +142,10 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor='givenName' className="col-span-2">Given Name</label>
-                            <Input
+                            <input
                                 id='givenName'
                                 aria-label={'Given Name'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('givenName', {
                                     required: 'Given Name is required',
                                 })}
@@ -176,11 +157,10 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor="lastName" className="col-span-2">Last Name</label>
-                            <Input
+                            <input
                                 id='lastName'
                                 aria-label={'Last Name'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('lastName', { required: 'Last Name is required' })}
                             />
                             {errors.lastName && (
@@ -190,36 +170,34 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor='gender' className="col-span-2">Gender</label>
-                            <Autocomplete
+                            <select
                                 id='gender'
                                 aria-label={'Gender'}
-                                radius="sm"
-                                className="col-span-4"
-                                defaultItems={genders}
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('gender', { required: "Gender is required" })}
                             >
-                                {item => (
-                                    <AutocompleteItem key={item.value} className="text-black">
-                                        {item.label}
-                                    </AutocompleteItem>
-                                )}
-                            </Autocomplete>
+                                {genders.map((gender => (
+                                    <option key={gender.value} value={gender.label}>
+                                        {gender.label}
+                                    </option>
+                                )))
+                                }
+                            </select>
                             {errors.gender && (
                                 <div className="text-red-500 col-span-6">
                                     {String(errors.gender.message)}
                                 </div>
                             )}
-
                             <label htmlFor='dob' className="col-span-2">DOB</label>
-                            <DatePicker
-                                id='dob'
-                                aria-label={'Date of Birth'}
-                                radius="sm"
-                                className="w-36 text-black "
-                                showMonthAndYearPickers
-                                {...register('dob')}
-                                onChange={(value: DateValue) => setValue('dob', String(value))}
-                            />
+                            <div className="relative col-span-4">
+                                <input
+                                    id='dob'
+                                    aria-label={'Date of Birth'}
+                                    type='date'
+                                    className="w-full bg-white border border-gray-300 rounded-md py-2 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    {...register('dob')}
+                                />
+                            </div>
                             {errors.dob && (
                                 <div className="text-red-500 col-span-6">
                                     {String(errors.dob.message)}
@@ -233,11 +211,10 @@ const FormComponent = () => {
                         <h2 className="text-xl font-bold">ADDRESS</h2>
                         <div className="grid grid-cols-6 gap-4 items-center">
                             <label htmlFor='address' className="col-span-2">Address</label>
-                            <Input
+                            <input
                                 id='address'
                                 aria-label={'Address'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('address', { required: 'Address is required' })}
                             />
                             {errors.address && (
@@ -247,11 +224,10 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor='street' className="col-span-2">Street</label>
-                            <Input
+                            <input
                                 id='street'
                                 aria-label={'Street'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('street', { required: 'Street is required' })}
                             />
                             {errors.street && (
@@ -261,11 +237,10 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor='city' className="col-span-2">City</label>
-                            <Input
+                            <input
                                 id='city'
                                 aria-label={'City'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('city', { required: 'City is required' })}
                             />
                             {errors.city && (
@@ -275,20 +250,19 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor='state' className="col-span-2">State</label>
-                            <Autocomplete
+                            <select
                                 id='state'
                                 aria-label={'State'}
-                                radius="sm"
-                                className="col-span-4"
-                                defaultItems={states}
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('state', { required: 'State is required' })}
                             >
-                                {item => (
-                                    <AutocompleteItem key={item.abbreviation} className="text-black">
-                                        {item.name}
-                                    </AutocompleteItem>
-                                )}
-                            </Autocomplete>
+                                {states.map((state) => (
+                                    <option key={state.abbreviation} value={state.abbreviation}>
+                                        {state.name}
+                                    </option>
+                                ))}
+
+                            </select>
                             {errors.state && (
                                 <div className="text-red-500 col-span-6">
                                     {String(errors.state.message)}
@@ -296,11 +270,10 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor='zip' className="col-span-2">ZIP</label>
-                            <Input
+                            <input
                                 id='zip'
                                 aria-label={'Zip code'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 type="number"
                                 {...register('zip', { required: 'ZIP is required' })}
                             />
@@ -311,20 +284,18 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor='country' className="col-span-2">Country</label>
-                            <Autocomplete
+                            <select
                                 id='country'
                                 aria-label={'Country'}
-                                radius="sm"
-                                className="col-span-4"
-                                defaultItems={countries}
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 {...register('country', { required: 'Country is required' })}
                             >
-                                {item => (
-                                    <AutocompleteItem key={item.abbreviation} className="text-black">
-                                        {item.name}
-                                    </AutocompleteItem>
-                                )}
-                            </Autocomplete>
+                                {countries.map((country) => (
+                                    <option key={country.abbreviation} value={country.abbreviation}>
+                                        {country.name}
+                                    </option>
+                                ))}
+                            </select>
                             {errors.country && (
                                 <div className="text-red-500 col-span-6">
                                     {String(errors.country.message)}
@@ -336,11 +307,10 @@ const FormComponent = () => {
                             <h2 className="col-span-6 text-xl font-bold">CONTACT</h2>
 
                             <label htmlFor='tel' className="col-span-2">Telephone</label>
-                            <Input
+                            <input
                                 id='tel'
                                 aria-label={'Telephone'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 type="tel"
                                 {...register('telephone', {
                                     required: 'Telephone is required',
@@ -353,11 +323,10 @@ const FormComponent = () => {
                             )}
 
                             <label htmlFor='email' className="col-span-2">Email</label>
-                            <Input
+                            <input
                                 id='email'
                                 aria-label={'Email'}
-                                radius="sm"
-                                className="col-span-4"
+                                className="col-span-4 bg-white border border-gray-300 rounded-md py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                                 type="email"
                                 {...register('email', { required: 'Email is required' })}
                             />
@@ -385,15 +354,15 @@ const FormComponent = () => {
                         </Checkbox>
                         <div className="flex items-center gap-4">
                             <label htmlFor='letterDate' className="">DATE</label>
-                            <DatePicker
-                                id='letterDate'
-                                aria-label={'Letter Date'}
-                                radius="sm"
-                                className="w-36 text-black "
-                                showMonthAndYearPickers
-                                {...register('letterDate')}
-                                onChange={(value: DateValue) => setValue('letterDate', String(value))}
-                            />
+                            <div className="relative col-span-4">
+                                <input
+                                    id='letterDate'
+                                    aria-label={'Date of Birth'}
+                                    type='date'
+                                    className="w-full bg-white border border-gray-300 rounded-md py-2 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    {...register('letterDate')}
+                                />
+                            </div>
                             {errors.letterDate && (
                                 <div className="text-red-500 col-span-6">
                                     {String(errors.letterDate.message)}
@@ -404,11 +373,10 @@ const FormComponent = () => {
 
                     <div className="flex flex-col mt-6 md:flex-row">
                         <label htmlFor='comments' className="mr-4">COMMENTS</label>
-                        <Textarea
+                        <textarea
                             id='comments'
                             aria-label={'Comments'}
-                            radius="sm"
-                            className="col-span-5"
+                            className="col-span-5 w-full bg-white border border-gray-300 rounded-md py-2 px-4 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                             {...register('comments')}
                         />
                         {errors.comments && (
@@ -425,7 +393,6 @@ const FormComponent = () => {
                         radius="full"
                         className="w-[150px] text-white bg-black mt-6"
                         type="submit"
-                    // onPress={() => handleSubmit(onSubmit)}
                     >
                         Submit
                     </Button>
@@ -435,27 +402,6 @@ const FormComponent = () => {
                         onPress={handleReset}
                     >
                         Reset Changes
-                    </Button>
-                    <Button onPress={() => {
-                        const formData = {
-                            uniqueId: getValues("uniqueId"),
-                            altId: getValues("altId"),
-                            givenName: getValues("givenName"),
-                            lastName: getValues("lastName"),
-                            gender: getValues("gender"),
-                            dob: getValues("dob"),
-                            address: getValues("address"),
-                            street: getValues("street"),
-                            city: getValues("city"),
-                            state: getValues("state"),
-                            zip: getValues("zip"),
-                            country: getValues("country"),
-                            telephone: getValues("telephone"),
-                            email: getValues("email")
-                        };
-
-                    }}>
-                        Get Form Data
                     </Button>
                 </div>
             </form>
