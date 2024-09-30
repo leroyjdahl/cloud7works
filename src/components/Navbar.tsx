@@ -95,9 +95,15 @@ const CustomNavbar: React.FC = () => {
                 <NavbarContent justify="start">
                     <NavbarMenuToggle className="sm:hidden" />
                     <NavbarBrand>
-                        <div className="h-[40px] w-[150px] bg-[#D9D9D9] text-black justify-center items-center flex">
+                        {/* <div className="h-[40px] w-[150px] bg-[#D9D9D9] text-black justify-center items-center flex">
                             WEB PORTAL LOGO
-                        </div>
+                        </div> */}
+                        <img
+                            src="/c7.png"
+                            alt="Logo"
+                            className="hidden sm:block h-10 w-auto"
+                        />
+                        <span className='hidden md:flex ml-2 tracking-wider'>CLOUD7WORKS</span>
                     </NavbarBrand>
                 </NavbarContent>
 

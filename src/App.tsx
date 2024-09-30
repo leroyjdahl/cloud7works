@@ -20,7 +20,7 @@ const App: React.FC<AppProps> = ({ message }) => {
     <NextUIProvider navigate={navigate}>
       <div className="text-black">
         <Navbar />
-        <div className="pt-4 max-w-5xl mx-auto px-4 pb-12">
+        <div className="pt-4 max-w-5xl mx-auto px-4 pb-12 min-h-[100vh]">
           <BreadcrumbList />
 
           <Routes>
