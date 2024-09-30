@@ -1,9 +1,22 @@
-import React, { useState, useCallback } from 'react';
-import { Navbar, Dropdown, Avatar, NavbarBrand, NavbarContent, DropdownTrigger, DropdownMenu, DropdownItem, NavbarItem } from '@nextui-org/react';
+import React, { useState, useCallback, memo } from 'react';
+import {
+    Navbar,
+    Dropdown,
+    Avatar,
+    NavbarBrand,
+    NavbarContent,
+    DropdownTrigger,
+    DropdownMenu,
+    DropdownItem,
+    NavbarItem,
+    NavbarMenu,
+    NavbarMenuItem,
+    NavbarMenuToggle
+} from '@nextui-org/react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown } from '../icons/ChevronDown';
 
-const CustomDropdownItem = React.memo(({ link, isOpen, onOpenChange }: any) => {
+const CustomDropdownItem = memo(({ link, isOpen, onOpenChange }: any) => {
     return (
         <NavbarItem>
             <Dropdown
@@ -35,7 +48,7 @@ const CustomNavbar: React.FC = () => {
     const location = useLocation();
 
     const NavLinks = [
-        { label: 'Dashboard', href: '/' },
+        { label: 'Dashboard', href: '/dashboard' },
         { label: 'Lorem Ipsum', href: '/lorem' },
         { label: 'Dolor', href: '/dolor' },
     ];
@@ -52,10 +65,14 @@ const CustomNavbar: React.FC = () => {
 
     const isActive = (href: string) => location.pathname === href;
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     return (
         <Navbar
             isBordered
             shouldHideOnScroll
+            isMenuOpen={isMenuOpen}
+            onMenuOpenChange={setIsMenuOpen}
             className='bg-white flex justify-around w-full'
             classNames={{
                 item: [
@@ -75,11 +92,14 @@ const CustomNavbar: React.FC = () => {
             }}
         >
             {/* Left side: Logo and Links */}
-            <NavbarBrand>
-                <div className='h-[40px] w-[150px] bg-[#D9D9D9] text-black justify-center items-center flex'>WEB PORTAL LOGO</div>
-            </NavbarBrand>
+            <NavbarContent>
+                <NavbarMenuToggle className="sm:hidden" />
+                <NavbarBrand>
+                    <div className='h-[40px] w-[150px] bg-[#D9D9D9] text-black justify-center items-center flex'>WEB PORTAL LOGO</div>
+                </NavbarBrand>
+            </NavbarContent>
 
-            <NavbarContent justify='end'>
+            <NavbarContent justify='end' className="hidden sm:flex gap-4">
                 {/* Static links */}
                 {NavLinks.map((link, index) => (
                     <NavbarItem key={index} isActive={isActive(link.href)}>
@@ -120,6 +140,36 @@ const CustomNavbar: React.FC = () => {
                     </DropdownMenu>
                 </Dropdown>
             </NavbarContent>
+
+            {/* Mobile menu */}
+            <NavbarMenu className='text-black'>
+                {NavLinks.map((item, index) => (
+                    <NavbarMenuItem key={`${item.label}-${index}`}>
+                        <Link
+                            color={
+                                index === 2 ? "primary" : index === NavLinks.length - 1 ? "danger" : "foreground"
+                            }
+                            className="w-full"
+                            to={item.href}
+                        >
+                            {item.label}
+                        </Link>
+                    </NavbarMenuItem>
+                ))}
+                {dropdownNavLinks.map((link, index) => (
+                    <NavbarMenuItem>
+                        <CustomDropdownItem
+                            key={index + dropdownNavLinks.length}
+                            link={link}
+                            isOpen={dropdownState[index + dropdownNavLinks.length]}
+                            onOpenChange={(isOpen: boolean) => handleDropdownChange(index, isOpen)}
+                        />
+                    </NavbarMenuItem>
+                ))}
+                <NavbarMenuItem>
+                    Logout
+                </NavbarMenuItem>
+            </NavbarMenu>
         </Navbar>
     );
 };
