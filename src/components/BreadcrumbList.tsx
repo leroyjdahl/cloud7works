@@ -7,26 +7,20 @@ const BreadcrumbList: React.FC = () => {
     const location = useLocation();
     const pathnames = location.pathname.split('/').filter(x => x); // Get non-empty segments
 
-    const breadcrumbPaths = pathnames.map((_, index) => `/${pathnames.slice(0, index + 1).join('/')}`);
+    const breadcrumbPaths = pathnames.map(
+        (_, index) => `/${pathnames.slice(0, index + 1).join('/')}`,
+    );
+
+    console.log(breadcrumbPaths);
 
     return (
         <Breadcrumbs>
-            <BreadcrumbItem>
-                <Link to="/">Home</Link>
-            </BreadcrumbItem>
-            {breadcrumbPaths.length > 0 ? (
+            {breadcrumbPaths.length > 0 &&
                 breadcrumbPaths.map((path, index) => (
                     <BreadcrumbItem key={path}>
-                        <Link to={path}>
-                            {getFriendlyName(path)}
-                        </Link>
+                        <Link to={path}>{getFriendlyName(path)}</Link>
                     </BreadcrumbItem>
-                ))
-            ) : (
-                <BreadcrumbItem>
-                    Home
-                </BreadcrumbItem>
-            )}
+                ))}
         </Breadcrumbs>
     );
 };

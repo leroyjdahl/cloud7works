@@ -11,45 +11,51 @@ import {
     NavbarItem,
     NavbarMenu,
     NavbarMenuItem,
-    NavbarMenuToggle
+    NavbarMenuToggle,
 } from '@nextui-org/react';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronDown } from '../icons/ChevronDown';
 import { mainNavLinks, dropdownNavLinks } from '../utils/routes';
 
-const CustomDropdownItem = memo(({ link, isOpen, onOpenChange, isActive }: any) => {
-    return (
-        <NavbarItem isActive={isActive}>
-            <Dropdown
-                className='text-black'
-                placement="bottom-start"
-                isOpen={isOpen}
-                onOpenChange={onOpenChange}
-            >
-                <DropdownTrigger>
-                    <span className={`cursor-pointer text-gray-600 flex items-center gap-2 ${isActive ? 'data-[active=true]:after:content-[""] data-[active=true]:after:absolute data-[active=true]:after:bottom-2 data-[active=true]:after:left-0 data-[active=true]:after:right-0 data-[active=true]:after:h-[5px] data-[active=true]:after:rounded-[2px] data-[active=true]:after:bg-black' : ''}`}>
-                        {link.label}
-                        <ChevronDown isOpen={isOpen} />
-                    </span>
-                </DropdownTrigger>
-                <DropdownMenu aria-label="Submenu">
-                    {link.links?.map((sublink: any, index: number) => (
-                        <DropdownItem key={sublink.path} textValue={sublink.name}>
-                            <Link to={sublink.path}>{sublink.name}</Link>
-                        </DropdownItem>
-                    ))}
-                </DropdownMenu>
-            </Dropdown>
-        </NavbarItem>
-    );
-});
+const CustomDropdownItem = memo(
+    ({ link, isOpen, onOpenChange, isActive }: any) => {
+        return (
+            <NavbarItem isActive={isActive}>
+                <Dropdown
+                    className="text-black"
+                    placement="bottom-start"
+                    isOpen={isOpen}
+                    onOpenChange={onOpenChange}
+                >
+                    <DropdownTrigger>
+                        <span
+                            className={`cursor-pointer text-gray-600 flex items-center gap-2 ${isActive ? 'data-[active=true]:after:content-[""] data-[active=true]:after:absolute data-[active=true]:after:bottom-2 data-[active=true]:after:left-0 data-[active=true]:after:right-0 data-[active=true]:after:h-[5px] data-[active=true]:after:rounded-[2px] data-[active=true]:after:bg-black' : ''}`}
+                        >
+                            {link.label}
+                            <ChevronDown isOpen={isOpen} />
+                        </span>
+                    </DropdownTrigger>
+                    <DropdownMenu aria-label="Submenu">
+                        {link.subroutes?.map((sublink: any, index: number) => (
+                            <DropdownItem key={sublink.path} textValue={sublink.name}>
+                                <Link to={sublink.path}>{sublink.name}</Link>
+                            </DropdownItem>
+                        ))}
+                    </DropdownMenu>
+                </Dropdown>
+            </NavbarItem>
+        );
+    },
+);
 
 const CustomNavbar: React.FC = () => {
-    const [dropdownState, setDropdownState] = useState<{ [key: number]: boolean }>({});
+    const [dropdownState, setDropdownState] = useState<{
+        [key: number]: boolean;
+    }>({});
     const location = useLocation();
 
     const handleDropdownChange = useCallback((index: number, isOpen: boolean) => {
-        setDropdownState((prev) => ({ ...prev, [index]: isOpen }));
+        setDropdownState(prev => ({ ...prev, [index]: isOpen }));
     }, []);
 
     const isActive = (href: string) => {
@@ -65,37 +71,41 @@ const CustomNavbar: React.FC = () => {
                 shouldHideOnScroll
                 isMenuOpen={isMenuOpen}
                 onMenuOpenChange={setIsMenuOpen}
-                className='bg-white flex justify-between w-full'
+                className="bg-white flex w-full"
                 classNames={{
+                    wrapper: ['px-4'],
+
                     item: [
-                        "flex",
-                        "relative",
-                        "h-full",
-                        "items-center",
+                        'flex',
+                        'relative',
+                        'h-full',
+                        'items-center',
                         "data-[active=true]:after:content-['']",
-                        "data-[active=true]:after:absolute",
-                        "data-[active=true]:after:bottom-2",
-                        "data-[active=true]:after:left-0",
-                        "data-[active=true]:after:right-0",
-                        "data-[active=true]:after:h-[5px]",
-                        "data-[active=true]:after:rounded-[2px]",
-                        "data-[active=true]:after:bg-black",
-                    ]
+                        'data-[active=true]:after:absolute',
+                        'data-[active=true]:after:bottom-2',
+                        'data-[active=true]:after:left-0',
+                        'data-[active=true]:after:right-0',
+                        'data-[active=true]:after:h-[5px]',
+                        'data-[active=true]:after:rounded-[2px]',
+                        'data-[active=true]:after:bg-black',
+                    ],
                 }}
             >
                 {/* Left side: Logo and Links */}
-                <NavbarContent>
+                <NavbarContent justify="start">
                     <NavbarMenuToggle className="sm:hidden" />
                     <NavbarBrand>
-                        <div className='h-[40px] w-[150px] bg-[#D9D9D9] text-black justify-center items-center flex'>WEB PORTAL LOGO</div>
+                        <div className="h-[40px] w-[150px] bg-[#D9D9D9] text-black justify-center items-center flex">
+                            WEB PORTAL LOGO
+                        </div>
                     </NavbarBrand>
                 </NavbarContent>
 
-                <NavbarContent justify='end' className="hidden sm:flex gap-4">
+                <NavbarContent justify="end" className="hidden sm:flex gap-4">
                     {/* Static links */}
                     {mainNavLinks.map((link, index) => (
                         <NavbarItem key={index} isActive={isActive(link.href)}>
-                            <Link to={link.href} className='flex items-center gap-2'>
+                            <Link to={link.href} className="flex items-center gap-2">
                                 <span>{link.label}</span>
                             </Link>
                         </NavbarItem>
@@ -109,14 +119,16 @@ const CustomNavbar: React.FC = () => {
                                 key={index}
                                 link={link}
                                 isOpen={dropdownState[index]}
-                                onOpenChange={(isOpen: boolean) => handleDropdownChange(index, isOpen)}
-                                isActive={isActiveDropdown} // Pass down the active state
+                                onOpenChange={(isOpen: boolean) =>
+                                    handleDropdownChange(index, isOpen)
+                                }
+                                isActive={isActiveDropdown}
                             />
                         );
                     })}
 
                     {/* Avatar dropdown user info */}
-                    <Dropdown placement="bottom-end" className='text-black'>
+                    <Dropdown placement="bottom-end" className="text-black">
                         <DropdownTrigger>
                             <Avatar size="sm" />
                         </DropdownTrigger>
@@ -138,12 +150,16 @@ const CustomNavbar: React.FC = () => {
                 </NavbarContent>
 
                 {/* Mobile menu */}
-                <NavbarMenu className='text-black'>
+                <NavbarMenu className="text-black">
                     {mainNavLinks.map((item, index) => (
                         <NavbarMenuItem key={`${item.label}-${index}`}>
                             <Link
                                 color={
-                                    index === 2 ? "primary" : index === mainNavLinks.length - 1 ? "danger" : "foreground"
+                                    index === 2
+                                        ? 'primary'
+                                        : index === mainNavLinks.length - 1
+                                            ? 'danger'
+                                            : 'foreground'
                                 }
                                 className="w-full"
                                 to={item.href}
@@ -157,8 +173,10 @@ const CustomNavbar: React.FC = () => {
                             <CustomDropdownItem
                                 link={link}
                                 isOpen={dropdownState[index + mainNavLinks.length]}
-                                onOpenChange={(isOpen: boolean) => handleDropdownChange(index + mainNavLinks.length, isOpen)}
-                                isActive={isActive(link.href)} // Check if this dropdown is active for mobile
+                                onOpenChange={(isOpen: boolean) =>
+                                    handleDropdownChange(index + mainNavLinks.length, isOpen)
+                                }
+                                isActive={isActive(link.href)}
                             />
                         </NavbarMenuItem>
                     ))}
