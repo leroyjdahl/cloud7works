@@ -15,3 +15,11 @@ export const theme = {
 };
 export const darkMode = "class";
 export const plugins = [nextui()];
+
+export const purge = {
+  enabled: true,
+  content,
+  options: {
+    safelist: ['dark'],
+  },
+};

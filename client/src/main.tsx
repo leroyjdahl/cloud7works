@@ -7,7 +7,7 @@ import './index.css';
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <Router>
-      <App message="Test props" />
+      <App />
     </Router>
   </React.StrictMode>,
 );

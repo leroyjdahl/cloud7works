@@ -7,12 +7,22 @@ import { FormActions } from '../components/FormActions';
 import { fetchForms } from '../api/fetchForms';
 import { formDefaultValues } from '../utils/formDefaults';
 import { Link } from 'react-router-dom';
+import useFetch from '../hooks/useFetch';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 const FormComponent = () => {
     const [selectedForm, setSelectedForm] = useState<any>(null);
     const [forms, setForms] = useState<any[]>([]);
+
+    const { data: formData, loading, error } = useFetch(`${API_URL}/api/forms`);
+
+    useEffect(() => {
+        if (formData) {
+            setForms(formData.data);
+        }
+    }, [formData]);
+
 
     const {
         register,
@@ -25,9 +35,7 @@ const FormComponent = () => {
         defaultValues: selectedForm || formDefaultValues,
     });
 
-    useEffect(() => {
-        fetchForms(API_URL).then((data: any) => setForms(data));
-    }, []);
+
 
     const handleFormSelect = (form: any) => {
         Object.keys(form).forEach((key) => setValue(key, form[key], { shouldTouch: true }));
@@ -43,6 +51,10 @@ const FormComponent = () => {
         setSelectedForm(null);
     };
 
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+
+
     return (
         <div>
             <div className="flex justify-between items-center my-2">
@@ -54,7 +66,7 @@ const FormComponent = () => {
                     Test link
                 </Link>
             </div>
-            <FormSelect forms={forms} setSelectedForm={setSelectedForm} handleFormSelect={handleFormSelect} selectedForm={selectedForm} />
+            <FormSelect forms={forms || []} setSelectedForm={setSelectedForm} handleFormSelect={handleFormSelect} selectedForm={selectedForm} />
             <Divider />
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
                 <FormInputs register={register} errors={errors} />

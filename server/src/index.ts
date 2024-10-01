@@ -1,9 +1,12 @@
 // src/index.ts in the backend
 import express from 'express';
 import cors from 'cors';
+import 'dotenv/config';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
+
+const TEST = process.env.TEST;
 
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -12,7 +15,7 @@ app.use(cors({
 }));
 
 app.get('/api/endpoint', (req, res) => {
-    res.json({ message: 'Hello from the backaasend!' });
+    res.json({ message: 'Hello from the backaasend!', test: TEST });
 });
 
 app.get('/api/forms', (req, res) => {
