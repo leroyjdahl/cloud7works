@@ -101,7 +101,7 @@ const CustomNavbar: React.FC = () => {
                         <img
                             src="/c7.png"
                             alt="Logo"
-                            className="hidden sm:block h-10 w-auto"
+                            className="block h-10 w-auto"
                         />
                         <span className='hidden md:flex ml-2 tracking-wider'>CLOUD7WORKS</span>
                     </NavbarBrand>
